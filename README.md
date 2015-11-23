@@ -39,9 +39,6 @@ You can create your own simple transitions of a style property of your own choos
 
 *Note: If you are using colors, please use `rgba()` syntax.*
 
-*Note: Transitions require `StyleSheet.flatten` available in React Native 0.15 or later. If you are running on anything lower, please polyfill as described under imperative usage.*
-
-
 ```html
 <TouchableOpacity onPress={() => this.setState({fontSize: (this.state.fontSize || 10) + 5 })}
   <Animatable.Text transition="fontSize" transitionValue={this.state.fontSize || 10}>Size me up, Scotty</Animatable.Text>
@@ -59,7 +56,8 @@ You can create your own simple transitions of a style property of your own choos
 |**`direction`**|Direction of animation, especially useful for repeating animations. Valid values: `normal`, `reverse`, `alternate`, `alternate-reverse`. |`normal`|
 |**`easing`**|Timing function for the animation. Valid values: `linear`, `ease`, `ease-in`, `ease-out`, `ease-in-out`. |`ease-in-out`|
 |**`iterationCount`**|How many times to run the animation, use `infinite` for looped animations. |`1`|
-|**`transition`**|What `style` property to transition, for example `opacity`, `rotate` or `fontSize`. Use array for multiple properties.  |*None*|
+|**`transition`**|What property to transition, for example `opacity`, `rotate` or `fontSize`. |*None*|
+|**`transitionValue`**|Current value of the transition. |`0`|
 
 ### Imperative Usage
 
@@ -88,16 +86,16 @@ To stop any ongoing animations, just invoke `stopAnimation()` on that element.
 
 #### Generic transitions
 
-##### `transition(fromValues, toValues[[, duration], easing])`
+##### `transition(property, fromValue, toValue[[, duration], easing])`
 
-Will transition between given styles. If no `duration` or `easing` is passed a spring animation will be used. 
+Will transition given style `property` between `fromValue` and `toValue`. If no `duration` or `easing` is passed a spring animation will be used. 
 
-##### `transitionTo(toValues[[, duration], easing])`
+##### `transitionTo(property, toValue[[, duration], easing])`
 
-This function will try to determine the current styles and pass it along to `transition()` as `fromValues`. 
+This function will try to determine the current value of the style `property` and pass it along to `transition()` as `fromValue`. This requires access to the StyleSheet registry which has long been a private api, but soon [this PR will expose it](https://github.com/facebook/react-native/pull/3308), in the meantime please polyfill like in the example below. If the property is already being transitioned either via a previous call to `transition()` or via the `transition` prop this it not neccessary.  
 
 ```js
-// Polyfill StyleSheet.flatten if RN < 0.15
+// Polyfill StyleSheet.flatten if neccesary
 if(!StyleSheet.flatten) {
   StyleSheet.flatten = require('flattenStyle');
 }
@@ -106,7 +104,7 @@ var Animatable = require('react-native-animatable');
 React.createClass({
   render: function() {
     return (
-      <TouchableWithoutFeedback onPress={() => this.refs.text.transitionTo({opacity: 0.2});}>
+      <TouchableWithoutFeedback onPress={() => this.refs.text.transitionTo('opacity', 0.2);}>
         <Animatable.Text ref="text">Fade me!</Animatable.Text>
       </TouchableWithoutFeedback>
     );

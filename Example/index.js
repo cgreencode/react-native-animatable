@@ -19,10 +19,6 @@ var { createAnimatableComponent, View, Text } = require('react-native-animatable
 var Accordion = require('react-native-collapsible/Accordion');
 ScrollView = createAnimatableComponent(ScrollView);
 
-if(!StyleSheet.flatten) {
-  StyleSheet.flatten = require('flattenStyle');
-}
-
 var COLORS = [
    '#65b237', // green
    '#346ca5', // blue
@@ -128,7 +124,7 @@ var Example = React.createClass({
   _animatables: {},
 
   getInitialState: function() {
-    return { duration: 1000, toggledOn: false };
+    return { duration: 1000, toggledOn: true };
   },
 
   render: function() {
@@ -139,7 +135,7 @@ var Example = React.createClass({
         <View animation="tada" delay={3000}>
           <SliderIOS
             style={styles.slider}
-            value={duration}
+            value={1000}
             onValueChange={duration => this.setState({ duration: Math.round(duration) })}
             maximumValue={2000}
           />
@@ -151,7 +147,9 @@ var Example = React.createClass({
         <Text style={styles.welcome}>Animatable Explorer</Text>
         {durationSlider}
         <TouchableWithoutFeedback onPress={() => this.setState({ toggledOn: !toggledOn })}>
-          <Text style={[styles.toggle, toggledOn && styles.toggledOn]} transition={['color', 'rotate', 'fontSize']}>Toggle me!</Text>
+          <View style={styles.toggle} transition="rotate" transitionValue={toggledOn ? '0deg' : '8deg'}>
+            <Text style={styles.toggleText} transition="color" transitionValue={toggledOn ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 33, 33, 1)'}>Toggle me!</Text>
+          </View>
         </TouchableWithoutFeedback>
         <Text animation="zoomInDown" delay={600} style={styles.instructions}>
           Tap one of the following to animate for {duration} ms
@@ -206,20 +204,12 @@ var styles = StyleSheet.create({
     backgroundColor: '#333',
     borderRadius: 3,
     padding: 5,
-    fontSize: 14,
     alignSelf: 'center',
-    textAlign: 'center',
+    alignItems: 'center',
     margin: 10,
-    color: 'rgba(255, 255, 255, 1)',
   },
-  toggledOn: {
-    color: 'rgba(255, 33, 33, 1)',
-    fontSize: 16,
-    transform: [{
-      rotate: '8deg'
-    }, {
-      translateY: -20
-    }]
+  toggleText: {
+    color: 'white',
   },
   sectionHeader: {
     borderTopWidth: 1 / PixelRatio.get(),
