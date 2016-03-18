@@ -384,7 +384,7 @@ var createAnimatableComponent = function(component) {
       }).start(endState => {
         iteration++;
         if(endState.finished && this.props.animation && (iterationCount === 'infinite' || iteration < iterationCount)) {
-          this._startAnimation(duration, iteration, callback);
+          this._startAnimation(duration, iteration);
         } else if(callback) {
           callback(endState);
         }
