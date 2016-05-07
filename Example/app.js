@@ -43,7 +43,6 @@ var ANIMATION_TYPES = {
     'flash',
     'jello',
     'pulse',
-    'rotate',
     'rubberBand',
     'shake',
     'swing',

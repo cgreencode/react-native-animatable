@@ -1,7 +1,6 @@
 'use strict';
 
-var React = require('react');
-var ReactNative = require('react-native');
+var React = require('react-native');
 var {
   StyleSheet,
   PropTypes,
@@ -11,7 +10,7 @@ var {
   View,
   Text,
   Image,
-} = ReactNative;
+} = React;
 
 // Transform an object to an array the way react native wants it for transform styles
 // { a: x, b: y } => [{ a: x }, { b: y }]
@@ -168,7 +167,7 @@ var getStyleValues = function(keys, style) {
 // Make (almost) any component animatable, similar to Animated.createAnimatedComponent
 var createAnimatableComponent = function(component) {
   var Animatable = Animated.createAnimatedComponent(component);
-  return ReactNative.createClass({
+  return React.createClass({
     propTypes: {
       animation:        PropTypes.string,
       onAnimationBegin: PropTypes.func,
@@ -544,17 +543,6 @@ var createAnimatableComponent = function(component) {
           scale: this.state.animationValue.interpolate({
             inputRange: [0, 0.5, 1],
             outputRange: [1, 1.05, 1],
-          }),
-        }],
-      });
-    },
-
-    rotate: function(duration) {
-      return this.animate(duration, {
-        transform: [{
-          rotate: this.state.animationValue.interpolate({
-            inputRange: [0, 0.25, 0.5, 0.75, 1],
-            outputRange: ['0 deg', '90 deg', '180 deg', '270 deg', '360 deg'],
           }),
         }],
       });
